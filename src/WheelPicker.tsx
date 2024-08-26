@@ -31,6 +31,7 @@ interface Props {
   visibleRest?: number;
   decelerationRate?: 'normal' | 'fast' | number;
   flatListProps?: Omit<FlatListProps<string | null>, 'data' | 'renderItem'>;
+  enableHaptics?: boolean;
 }
 
 const WheelPicker: React.FC<Props> = ({
@@ -49,6 +50,7 @@ const WheelPicker: React.FC<Props> = ({
   decelerationRate = 'fast',
   containerProps = {},
   flatListProps = {},
+  enableHaptics = false,
 }) => {
   const flatListRef = useRef<FlatList>(null);
   const [scrollY] = useState(new Animated.Value(0));
@@ -138,7 +140,7 @@ const WheelPicker: React.FC<Props> = ({
           [{ nativeEvent: { contentOffset: { y: scrollY } } }],
           {
             useNativeDriver: true,
-            listener: () => Haptics.selectionAsync(),
+            listener: () => {if(enableHaptics) Haptics.selectionAsync();},
           },
         )}
         onMomentumScrollEnd={handleMomentumScrollEnd}
