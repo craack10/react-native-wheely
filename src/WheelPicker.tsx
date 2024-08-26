@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import styles from './WheelPicker.styles';
 import WheelPickerItem from './WheelPickerItem';
+import * as Haptics from 'expo-haptics';
 
 interface Props {
   selectedIndex: number;
@@ -135,7 +136,10 @@ const WheelPicker: React.FC<Props> = ({
         showsVerticalScrollIndicator={false}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-          { useNativeDriver: true },
+          {
+            useNativeDriver: true,
+            listener: () => Haptics.selectionAsync(),
+          },
         )}
         onMomentumScrollEnd={handleMomentumScrollEnd}
         snapToOffsets={offsets}
