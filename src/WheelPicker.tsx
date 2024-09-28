@@ -14,6 +14,7 @@ import {
 import styles from './WheelPicker.styles';
 import WheelPickerItem from './WheelPickerItem';
 import * as Haptics from 'expo-haptics';
+import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 
 interface Props {
   selectedIndex: number;
@@ -52,7 +53,7 @@ const WheelPicker: React.FC<Props> = ({
   flatListProps = {},
   enableHaptics = false,
 }) => {
-  const flatListRef = useRef<FlatList>(null);
+  const flatListRef = useRef<any>(null);
   const [scrollY] = useState(new Animated.Value(0));
 
   const containerHeight = (1 + visibleRest * 2) * itemHeight;
@@ -98,8 +99,7 @@ const WheelPicker: React.FC<Props> = ({
   useEffect(() => {
     if (selectedIndex < 0 || selectedIndex >= options.length) {
       throw new Error(
-        `Selected index ${selectedIndex} is out of bounds [0, ${
-          options.length - 1
+        `Selected index ${selectedIndex} is out of bounds [0, ${options.length - 1
         }]`,
       );
     }
@@ -131,21 +131,20 @@ const WheelPicker: React.FC<Props> = ({
           },
         ]}
       />
-      <Animated.FlatList<string | null>
+      <BottomSheetFlatList
         {...flatListProps}
         ref={flatListRef}
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
-        onScroll={Animated.event(
+        onScrollBeginDrag={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scrollY } } }],
           {
             useNativeDriver: true,
-            listener: () => {if(enableHaptics) Haptics.selectionAsync();},
+            listener: () => { if (enableHaptics) Haptics.selectionAsync(); },
           },
         )}
         onMomentumScrollEnd={handleMomentumScrollEnd}
         snapToOffsets={offsets}
-        decelerationRate={decelerationRate}
         initialScrollIndex={selectedIndex}
         getItemLayout={(data, index) => ({
           length: itemHeight,
