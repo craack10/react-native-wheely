@@ -15,6 +15,7 @@ import styles from './WheelPicker.styles';
 import WheelPickerItem from './WheelPickerItem';
 import * as Haptics from 'expo-haptics';
 import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
+import { NativeViewGestureHandler } from 'react-native-gesture-handler';
 
 interface Props {
   selectedIndex: number;
@@ -117,59 +118,61 @@ const WheelPicker: React.FC<Props> = ({
   }, [selectedIndex]);
 
   return (
-    <View
-      style={[styles.container, { height: containerHeight }, containerStyle]}
-      {...containerProps}
-    >
+    <NativeViewGestureHandler disallowInterruption={true}>
       <View
-        style={[
-          styles.selectedIndicator,
-          selectedIndicatorStyle,
-          {
-            transform: [{ translateY: -itemHeight / 2 }],
-            height: itemHeight,
-          },
-        ]}
-      />
-      <BottomSheetFlatList
-        {...flatListProps}
-        ref={flatListRef}
-        style={styles.scrollView}
-        showsVerticalScrollIndicator={false}
-        onScrollBeginDrag={Animated.event(
-          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-          {
-            useNativeDriver: true,
-            listener: () => { if (enableHaptics) Haptics.selectionAsync(); },
-          },
-        )}
-        onMomentumScrollEnd={handleMomentumScrollEnd}
-        snapToOffsets={offsets}
-        initialScrollIndex={selectedIndex}
-        getItemLayout={(data, index) => ({
-          length: itemHeight,
-          offset: itemHeight * index,
-          index,
-        })}
-        data={paddedOptions}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item: option, index }) => (
-          <WheelPickerItem
-            key={`option-${index}`}
-            index={index}
-            option={option}
-            style={itemStyle}
-            textStyle={itemTextStyle}
-            height={itemHeight}
-            currentScrollIndex={currentScrollIndex}
-            scaleFunction={scaleFunction}
-            rotationFunction={rotationFunction}
-            opacityFunction={opacityFunction}
-            visibleRest={visibleRest}
-          />
-        )}
-      />
-    </View>
+        style={[styles.container, { height: containerHeight }, containerStyle]}
+        {...containerProps}
+      >
+        <View
+          style={[
+            styles.selectedIndicator,
+            selectedIndicatorStyle,
+            {
+              transform: [{ translateY: -itemHeight / 2 }],
+              height: itemHeight,
+            },
+          ]}
+        />
+        <BottomSheetFlatList
+          {...flatListProps}
+          ref={flatListRef}
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
+          onScrollBeginDrag={Animated.event(
+            [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+            {
+              useNativeDriver: true,
+              listener: () => { if (enableHaptics) Haptics.selectionAsync(); },
+            },
+          )}
+          onMomentumScrollEnd={handleMomentumScrollEnd}
+          snapToOffsets={offsets}
+          initialScrollIndex={selectedIndex}
+          getItemLayout={(data, index) => ({
+            length: itemHeight,
+            offset: itemHeight * index,
+            index,
+          })}
+          data={paddedOptions}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item: option, index }) => (
+            <WheelPickerItem
+              key={`option-${index}`}
+              index={index}
+              option={option}
+              style={itemStyle}
+              textStyle={itemTextStyle}
+              height={itemHeight}
+              currentScrollIndex={currentScrollIndex}
+              scaleFunction={scaleFunction}
+              rotationFunction={rotationFunction}
+              opacityFunction={opacityFunction}
+              visibleRest={visibleRest}
+            />
+          )}
+        />
+      </View>
+    </NativeViewGestureHandler>
   );
 };
 
