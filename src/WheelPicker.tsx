@@ -9,12 +9,12 @@ import {
   View,
   ViewProps,
   FlatListProps,
-  FlatList,
 } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';}
 import styles from './WheelPicker.styles';
 import WheelPickerItem from './WheelPickerItem';
 import * as Haptics from 'expo-haptics';
-import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
+import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView, NativeViewGestureHandler } from 'react-native-gesture-handler';
 
 interface Props {
@@ -133,7 +133,7 @@ const WheelPicker: React.FC<Props> = ({
             },
           ]}
         />
-        <BottomSheetFlatList
+        <FlatList
           {...flatListProps}
           ref={flatListRef}
           style={styles.scrollView}
