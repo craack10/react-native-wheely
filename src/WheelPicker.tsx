@@ -10,7 +10,7 @@ import {
   ViewProps,
   FlatListProps,
 } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';}
+import { FlatList } from 'react-native-gesture-handler';
 import styles from './WheelPicker.styles';
 import WheelPickerItem from './WheelPickerItem';
 import * as Haptics from 'expo-haptics';
